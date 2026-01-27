@@ -1,0 +1,1 @@
+// This is for typescript, all the types are defined here
