@@ -1,6 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { loginWithCredentials, loginWithGoogle } from '@/app/actions/actions';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Separator } from '@/components/ui/separator';
 
 export default function LoginPage() {
+    const searchParams = useSearchParams();
+    const inviteToken = searchParams.get('invite');
     const [state, formAction, isPending] = useActionState(loginWithCredentials, undefined);
 
     return (
@@ -26,11 +29,16 @@ export default function LoginPage() {
                     </div>
                     <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
                     <CardDescription>
-                        Sign in to your account to continue
+                        {inviteToken
+                            ? 'Sign in to accept your team invitation'
+                            : 'Sign in to your account to continue'}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <form action={loginWithGoogle}>
+                        {inviteToken && (
+                            <input type="hidden" name="redirectTo" value={`/invite/${inviteToken}`} />
+                        )}
                         <Button variant="outline" className="w-full" type="submit">
                             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                                 <path
@@ -61,6 +69,9 @@ export default function LoginPage() {
                     </div>
 
                     <form action={formAction} className="space-y-4">
+                        {inviteToken && (
+                            <input type="hidden" name="redirectTo" value={`/invite/${inviteToken}`} />
+                        )}
                         <div className="space-y-2">
                             <Label htmlFor="email">Email address</Label>
                             <Input
@@ -96,7 +107,10 @@ export default function LoginPage() {
                 <CardFooter className="justify-center">
                     <p className="text-sm text-muted-foreground">
                         Don&apos;t have an account?{' '}
-                        <Link href="/signup" className="text-primary hover:text-primary/90 font-medium">
+                        <Link
+                            href={inviteToken ? `/signup?invite=${inviteToken}` : '/signup'}
+                            className="text-primary hover:text-primary/90 font-medium"
+                        >
                             Sign up
                         </Link>
                     </p>

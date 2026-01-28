@@ -1,6 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { registerUser, loginWithGoogle } from '@/app/actions/actions';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Separator } from '@/components/ui/separator';
 
 export default function SignUpPage() {
+    const searchParams = useSearchParams();
+    const inviteToken = searchParams.get('invite');
+    const inviteEmail = searchParams.get('email');
     const [state, formAction, isPending] = useActionState(registerUser, undefined);
 
     return (
@@ -26,11 +30,16 @@ export default function SignUpPage() {
                     </div>
                     <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
                     <CardDescription>
-                        Get started with your free trial today
+                        {inviteToken
+                            ? 'Create an account to join your team'
+                            : 'Get started with your free trial today'}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <form action={loginWithGoogle}>
+                        {inviteToken && (
+                            <input type="hidden" name="redirectTo" value={`/invite/${inviteToken}`} />
+                        )}
                         <Button variant="outline" className="w-full" type="submit">
                             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                                 <path
@@ -61,6 +70,9 @@ export default function SignUpPage() {
                     </div>
 
                     <form action={formAction} className="space-y-4">
+                        {inviteToken && (
+                            <input type="hidden" name="inviteToken" value={inviteToken} />
+                        )}
                         <div className="space-y-2">
                             <Label htmlFor="name">Full Name</Label>
                             <Input
@@ -78,8 +90,14 @@ export default function SignUpPage() {
                                 name="email"
                                 type="email"
                                 placeholder="you@example.com"
+                                defaultValue={inviteEmail || ''}
                                 required
                             />
+                            {inviteEmail && (
+                                <p className="text-xs text-muted-foreground">
+                                    Please use this email to match your invitation
+                                </p>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -107,7 +125,10 @@ export default function SignUpPage() {
                 <CardFooter className="justify-center">
                     <p className="text-sm text-muted-foreground">
                         Already have an account?{' '}
-                        <Link href="/login" className="text-primary hover:text-primary/90 font-medium">
+                        <Link
+                            href={inviteToken ? `/login?invite=${inviteToken}` : '/login'}
+                            className="text-primary hover:text-primary/90 font-medium"
+                        >
                             Sign in
                         </Link>
                     </p>

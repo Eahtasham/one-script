@@ -11,6 +11,7 @@ import {
 import { eq, and } from 'drizzle-orm';
 import { randomBytes } from 'crypto';
 import { requireAuth, isOrganizationAdmin } from '@/lib/session';
+import { emailService } from './email';
 
 const getURL = () => {
     let url =
@@ -21,6 +22,52 @@ const getURL = () => {
     url = url.endsWith('/') ? url : `${url}/`;
     return url;
 };
+
+/**
+ * Get invitation details by token (public - no auth required)
+ * Used by invite page to show invitation info before user logs in
+ */
+export async function getInvitationByToken(token: string) {
+    const invitation = await db.query.invitations.findFirst({
+        where: eq(invitations.token, token),
+    });
+
+    if (!invitation) {
+        return { error: 'Invitation not found' };
+    }
+
+    // Check if expired
+    if (new Date() > invitation.expiresAt) {
+        return { error: 'This invitation has expired', expired: true };
+    }
+
+    // Check if already accepted
+    if (invitation.status !== 'pending') {
+        return { error: `This invitation has been ${invitation.status}`, status: invitation.status };
+    }
+
+    // Get organization details
+    const organization = await db.query.organizations.findFirst({
+        where: eq(organizations.id, invitation.organizationId),
+    });
+
+    // Get inviter details
+    const inviter = await db.query.users.findFirst({
+        where: eq(users.id, invitation.invitedById),
+    });
+
+    return {
+        success: true,
+        invitation: {
+            id: invitation.id,
+            email: invitation.email,
+            role: invitation.role,
+            expiresAt: invitation.expiresAt,
+            organizationName: organization?.name || 'Unknown Organization',
+            inviterName: inviter?.name || inviter?.email || 'A team member',
+        },
+    };
+}
 
 /**
  * Invite a team member to an organization
@@ -36,6 +83,15 @@ export async function inviteTeamMember(
     const isAdmin = await isOrganizationAdmin(currentUser.id, organizationId);
     if (!isAdmin) {
         return { error: 'Only admins can invite team members' };
+    }
+
+    // Get organization details for email
+    const organization = await db.query.organizations.findFirst({
+        where: eq(organizations.id, organizationId),
+    });
+
+    if (!organization) {
+        return { error: 'Organization not found' };
     }
 
     // Check if user already exists
@@ -85,19 +141,30 @@ export async function inviteTeamMember(
         expiresAt,
     }).returning();
 
-
-
     const inviteUrl = `${getURL()}invite/${token}`;
 
-    // TODO: Send invitation email here
-    // You can integrate with Resend, SendGrid, or any email service
-    console.log(`Invitation URL for ${email}: ${inviteUrl}`);
+    // Send invitation email
+    const inviterName = currentUser.name || currentUser.email || 'A team member';
+    const emailResult = await emailService.sendInvitationEmail(
+        email.toLowerCase(),
+        organization.name,
+        inviterName,
+        inviteUrl,
+        role
+    );
+
+    if (!emailResult.success) {
+        console.error('Failed to send invitation email:', emailResult.error);
+        // Still return success since invitation was created
+        // User can share the link manually
+    }
 
     return {
         success: true,
         invitation,
         inviteUrl, // For manual sharing if needed
         message: `Invitation sent to ${email}`,
+        emailSent: emailResult.success,
     };
 }
 
