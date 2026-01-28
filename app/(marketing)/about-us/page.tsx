@@ -1,0 +1,12 @@
+export default function AboutUsPage() {
+    return (
+        <div className="min-h-screen bg-gray-900">
+            <div className="max-w-4xl mx-auto px-4 py-16">
+                <h1 className="text-4xl font-bold text-white mb-8">About Us</h1>
+                <p className="text-gray-400 text-lg">
+                    OneScript is building the future of customer support with AI-powered chatbots.
+                </p>
+            </div>
+        </div>
+    );
+}
