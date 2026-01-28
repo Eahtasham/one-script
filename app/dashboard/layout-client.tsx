@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { logout } from '@/app/(auth)/actions';
+import { logout } from '@/app/actions/actions';
 import type { Organization, OrganizationMember } from '@/db/schema';
 import {
     Sidebar,
@@ -30,7 +30,7 @@ import {
     Building2
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { ThemeToggle } from '@/components/custom/theme-toggle';
 
 interface DashboardUser {
     id: string;

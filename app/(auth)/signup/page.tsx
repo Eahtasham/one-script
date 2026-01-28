@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-import { registerUser, loginWithGoogle } from '@/app/(auth)/actions';
+import { registerUser, loginWithGoogle } from '@/app/actions/actions';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
