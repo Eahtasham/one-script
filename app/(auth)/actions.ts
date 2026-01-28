@@ -9,7 +9,7 @@ import { emailService } from '@/services/email';
 import { redirect } from 'next/navigation';
 import crypto from 'crypto';
 
-export async function loginWithCredentials(prevState: any, formData: FormData) {
+export async function loginWithCredentials(prevState: unknown, formData: FormData) {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
@@ -35,7 +35,7 @@ export async function logout() {
     await signOut({ redirectTo: '/login' });
 }
 
-export async function registerUser(prevState: any, formData: FormData) {
+export async function registerUser(prevState: unknown, formData: FormData) {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const name = formData.get('name') as string;

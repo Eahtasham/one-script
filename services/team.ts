@@ -85,10 +85,7 @@ export async function inviteTeamMember(
         expiresAt,
     }).returning();
 
-    // Get organization details for email
-    const organization = await db.query.organizations.findFirst({
-        where: eq(organizations.id, organizationId),
-    });
+
 
     const inviteUrl = `${getURL()}invite/${token}`;
 

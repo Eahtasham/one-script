@@ -6,8 +6,8 @@ import { eq, count } from 'drizzle-orm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { Book, MessageSquare, CheckCircle, Code, Copy } from 'lucide-react';
-import { redirect } from 'next/navigation';
+import { Book, MessageSquare, CheckCircle, Copy } from 'lucide-react';
+
 
 export default async function DashboardHomePage() {
     const session = await auth();

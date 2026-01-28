@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { inviteTeamMember, getOrganizationMembers, getPendingInvitations, updateMemberRole, removeMember, cancelInvitation } from '@/services/team';
+import { inviteTeamMember, getPendingInvitations, updateMemberRole, removeMember, cancelInvitation } from '@/services/team';
 import type { UserRole } from '@/db/schema';
 
 interface SettingsPageClientProps {
@@ -124,8 +124,8 @@ export default function SettingsPageClient({
             {/* Message */}
             {message && (
                 <div className={`mb-6 p-4 rounded-xl ${message.type === 'success'
-                        ? 'bg-green-500/10 border border-green-500/20 text-green-400'
-                        : 'bg-red-500/10 border border-red-500/20 text-red-400'
+                    ? 'bg-green-500/10 border border-green-500/20 text-green-400'
+                    : 'bg-red-500/10 border border-red-500/20 text-red-400'
                     }`}>
                     {message.text}
                 </div>
@@ -137,8 +137,8 @@ export default function SettingsPageClient({
                     <button
                         onClick={() => setActiveTab('general')}
                         className={`pb-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'general'
-                                ? 'border-indigo-500 text-white'
-                                : 'border-transparent text-gray-400 hover:text-white'
+                            ? 'border-indigo-500 text-white'
+                            : 'border-transparent text-gray-400 hover:text-white'
                             }`}
                     >
                         General
@@ -147,8 +147,8 @@ export default function SettingsPageClient({
                         <button
                             onClick={() => setActiveTab('team')}
                             className={`pb-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'team'
-                                    ? 'border-indigo-500 text-white'
-                                    : 'border-transparent text-gray-400 hover:text-white'
+                                ? 'border-indigo-500 text-white'
+                                : 'border-transparent text-gray-400 hover:text-white'
                                 }`}
                         >
                             Team
