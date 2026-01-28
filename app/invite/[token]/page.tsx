@@ -20,11 +20,11 @@ export default async function InvitePage({ params }: InvitePageProps) {
     // Handle invalid/expired invitation
     if (inviteResult.error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
+            <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
                 <div className="relative w-full max-w-md">
                     <div className="text-center mb-8">
                         <Link href="/" className="inline-flex items-center gap-2">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                                 <span className="text-white font-bold text-xl">O</span>
                             </div>
                             <span className="text-2xl font-bold text-white">OneScript</span>
@@ -58,11 +58,11 @@ export default async function InvitePage({ params }: InvitePageProps) {
         // Check if email matches
         if (session.user?.email?.toLowerCase() !== invitation?.email.toLowerCase()) {
             return (
-                <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
+                <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
                     <div className="relative w-full max-w-md">
                         <div className="text-center mb-8">
                             <Link href="/" className="inline-flex items-center gap-2">
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                                <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                                     <span className="text-white font-bold text-xl">O</span>
                                 </div>
                                 <span className="text-2xl font-bold text-white">OneScript</span>
@@ -105,11 +105,11 @@ export default async function InvitePage({ params }: InvitePageProps) {
 
         // Show error if acceptance failed
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
+            <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
                 <div className="relative w-full max-w-md">
                     <div className="text-center mb-8">
                         <Link href="/" className="inline-flex items-center gap-2">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                                 <span className="text-white font-bold text-xl">O</span>
                             </div>
                             <span className="text-2xl font-bold text-white">OneScript</span>
@@ -138,11 +138,11 @@ export default async function InvitePage({ params }: InvitePageProps) {
 
     // Not authenticated - show invitation info with login/signup options
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
             <div className="relative w-full max-w-md">
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                             <span className="text-white font-bold text-xl">O</span>
                         </div>
                         <span className="text-2xl font-bold text-white">OneScript</span>
