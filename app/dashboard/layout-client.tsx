@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { logout } from '@/app/actions/actions';
 import type { Organization, OrganizationMember } from '@/db/schema';
@@ -80,10 +81,7 @@ export default function DashboardLayoutClient({
                     <SidebarHeader>
                         <div className="flex items-center justify-between px-2 py-2">
                             <div className="flex items-center gap-2">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                                    <span className="font-bold">O</span>
-                                </div>
-                                <span className="text-lg font-bold text-sidebar-foreground">OneScript</span>
+                                <Image src="/assets/logo.svg" alt="OneScript Logo" width={140} height={38} priority />
                             </div>
                             <ThemeToggle />
                         </div>

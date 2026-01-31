@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { getInvitationByToken, acceptInvitation } from '@/services/team';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface InvitePageProps {
     params: Promise<{ token: string }>;
@@ -24,10 +25,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                 <div className="relative w-full max-w-md">
                     <div className="text-center mb-8">
                         <Link href="/" className="inline-flex items-center gap-2">
-                            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                                <span className="text-white font-bold text-xl">O</span>
-                            </div>
-                            <span className="text-2xl font-bold text-white">OneScript</span>
+                            <Image src="/assets/logo.svg" alt="OneScript Logo" width={180} height={48} priority />
                         </Link>
                     </div>
 
@@ -62,10 +60,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                     <div className="relative w-full max-w-md">
                         <div className="text-center mb-8">
                             <Link href="/" className="inline-flex items-center gap-2">
-                                <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                                    <span className="text-white font-bold text-xl">O</span>
-                                </div>
-                                <span className="text-2xl font-bold text-white">OneScript</span>
+                                <Image src="/assets/logo.svg" alt="OneScript Logo" width={180} height={48} priority />
                             </Link>
                         </div>
 
@@ -109,10 +104,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                 <div className="relative w-full max-w-md">
                     <div className="text-center mb-8">
                         <Link href="/" className="inline-flex items-center gap-2">
-                            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                                <span className="text-white font-bold text-xl">O</span>
-                            </div>
-                            <span className="text-2xl font-bold text-white">OneScript</span>
+                            <Image src="/assets/logo.svg" alt="OneScript Logo" width={180} height={48} priority />
                         </Link>
                     </div>
 
@@ -142,10 +134,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
             <div className="relative w-full max-w-md">
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                            <span className="text-white font-bold text-xl">O</span>
-                        </div>
-                        <span className="text-2xl font-bold text-white">OneScript</span>
+                        <Image src="/assets/logo.svg" alt="OneScript Logo" width={180} height={48} priority />
                     </Link>
                 </div>
 

@@ -5,6 +5,7 @@ import { useActionState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { registerUser, loginWithGoogle } from '@/app/actions/actions';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,10 +23,7 @@ function SignUpForm() {
             <CardHeader className="space-y-1 text-center">
                 <div className="flex justify-center mb-4">
                     <Link href="/" className="inline-flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                            <span className="text-primary-foreground font-bold text-xl">O</span>
-                        </div>
-                        <span className="text-2xl font-bold text-foreground">OneScript</span>
+                        <Image src="/assets/logo.svg" alt="OneScript Logo" width={180} height={48} priority />
                     </Link>
                 </div>
                 <CardTitle className="text-2xl font-bold">Create an account</CardTitle>

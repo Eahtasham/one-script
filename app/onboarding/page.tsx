@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function OnboardingPage() {
     const router = useRouter();
@@ -47,10 +48,7 @@ export default function OnboardingPage() {
             <div className="relative w-full max-w-lg">
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                            <span className="text-white font-bold text-xl">O</span>
-                        </div>
-                        <span className="text-2xl font-bold text-white">OneScript</span>
+                        <Image src="/assets/logo.svg" alt="OneScript Logo" width={180} height={48} priority />
                     </Link>
                 </div>
 
