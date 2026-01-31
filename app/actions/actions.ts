@@ -12,12 +12,13 @@ import crypto from 'crypto';
 export async function loginWithCredentials(prevState: unknown, formData: FormData) {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
+    const redirectTo = formData.get('redirectTo') as string | null;
 
     try {
         await signIn('credentials', {
             email,
             password,
-            redirectTo: '/dashboard',
+            redirectTo: redirectTo || '/dashboard',
         });
     } catch (error: unknown) {
         if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
@@ -27,8 +28,9 @@ export async function loginWithCredentials(prevState: unknown, formData: FormDat
     }
 }
 
-export async function loginWithGoogle() {
-    await signIn('google', { redirectTo: '/dashboard' });
+export async function loginWithGoogle(formData?: FormData) {
+    const redirectTo = formData?.get('redirectTo') as string | null;
+    await signIn('google', { redirectTo: redirectTo || '/dashboard' });
 }
 
 export async function logout() {
@@ -39,6 +41,7 @@ export async function registerUser(prevState: unknown, formData: FormData) {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const name = formData.get('name') as string;
+    const inviteToken = formData.get('inviteToken') as string | null;
 
     if (!email || !password) {
         return { error: 'Email and password are required' };
@@ -68,21 +71,25 @@ export async function registerUser(prevState: unknown, formData: FormData) {
             password: hashedPassword,
         }).returning();
 
-        // Create default organization
-        const orgName = name ? `${name}'s Workspace` : `${email.split('@')[0]}'s Workspace`;
-        const slug = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString(36);
+        // If user has invite token, don't create default org
+        // They will join the invited org after signing in
+        if (!inviteToken) {
+            // Create default organization
+            const orgName = name ? `${name}'s Workspace` : `${email.split('@')[0]}'s Workspace`;
+            const slug = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString(36);
 
-        const [organization] = await db.insert(organizations).values({
-            name: orgName,
-            slug,
-        }).returning();
+            const [organization] = await db.insert(organizations).values({
+                name: orgName,
+                slug,
+            }).returning();
 
-        // Add user as admin
-        await db.insert(organizationMembers).values({
-            organizationId: organization.id,
-            userId: user.id,
-            role: 'admin',
-        });
+            // Add user as admin
+            await db.insert(organizationMembers).values({
+                organizationId: organization.id,
+                userId: user.id,
+                role: 'admin',
+            });
+        }
 
         // Generate verification token
         const token = crypto.randomBytes(32).toString('hex');
@@ -97,6 +104,17 @@ export async function registerUser(prevState: unknown, formData: FormData) {
         // Send verification email
         await emailService.sendVerificationEmail(email, token);
 
+        // If there's an invite token, redirect to accept it after signup
+        if (inviteToken) {
+            // Sign in the user and redirect to invite page
+            await signIn('credentials', {
+                email,
+                password,
+                redirect: false,
+            });
+            redirect(`/invite/${inviteToken}`);
+        }
+
         // Redirect to verification page
     } catch (error: unknown) {
         if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
@@ -108,3 +126,4 @@ export async function registerUser(prevState: unknown, formData: FormData) {
 
     redirect('/verify-email?sent=true');
 }
+

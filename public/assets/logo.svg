@@ -1,0 +1,46 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="400"
+  height="100"
+  viewBox="0 0 400 100"
+  role="img"
+  aria-label="One&lt;Script&gt; Logo"
+>
+  <style>
+    :root {
+      --one-color: #000000;
+      --script-color: #3b82f6;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --one-color: #ffffff;
+      }
+    }
+
+    text {
+      font-family: "Inter", "Segoe UI", "Roboto", "Arial", sans-serif;
+      font-weight: 600;
+      font-size: 48px;
+      dominant-baseline: middle;
+    }
+  </style>
+
+  <!-- One -->
+  <text
+    x="40"
+    y="50"
+    fill="var(--one-color)"
+  >
+    One
+  </text>
+
+  <!-- <Script> -->
+  <text
+    x="130"
+    y="50"
+    fill="var(--script-color)"
+  >
+    &lt;Script&gt;
+  </text>
+</svg>
