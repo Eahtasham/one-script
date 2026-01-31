@@ -70,12 +70,52 @@
 
 ---
 
+## 🗂 State Management
+
+The application uses a hybrid state management approach optimized for Next.js:
+
+### Zustand (Client State)
+- **`auth-store`**: User, organization, and membership data hydrated once at dashboard layout
+- **`chat-store`**: Active conversation and message state
+- **`dashboard-store`**: UI preferences like sidebar collapsed state (persisted)
+- **`ui-store`**: Global UI state (modals, notifications)
+
+### TanStack Query (Server State)
+- **Automatic caching**: Data stays fresh for 5 minutes, cached for 30 minutes
+- **Background refetching**: Updates on window focus
+- **Dashboard queries**: `useDashboardStats()`, `useTeamMembers()`
+
+### Architecture
+```
+Server Component (layout.tsx)
+    └── Fetches auth data once
+        └── AuthProvider (hydrates Zustand)
+            └── Client Components
+                ├── useAuthStore() → user, org, membership
+                └── useDashboardStats() → TanStack Query cache
+```
+
+### Usage Example
+```tsx
+import { useUser, useOrganization } from '@/components/providers/auth-provider';
+import { useDashboardStats } from '@/hooks/use-dashboard-queries';
+
+function MyComponent() {
+    const user = useUser();                      // From Zustand
+    const org = useOrganization();               // From Zustand
+    const { data: stats } = useDashboardStats(); // From TanStack Query
+}
+```
+
+---
+
 ## 🛠 Tech Stack
 
 *   **Framework:** Next.js (App Router)
 *   **Styling:** Tailwind CSS, Framer Motion
-*   **Database & Auth:** Neon (Postgres + Auth)
-*   **AI & Logic:** OpenAI (GPT-4o-mini), js-tiktoken
+*   **State Management:** Zustand, TanStack Query
+*   **Database \u0026 Auth:** Neon (Postgres + Auth)
+*   **AI \u0026 Logic:** OpenAI (GPT-4o-mini), js-tiktoken
 *   **Scraping:** Custom Crawler (Puppeteer/Playwright)
 *   **Vector DB:** Neon pgvector
 

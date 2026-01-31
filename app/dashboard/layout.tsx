@@ -5,6 +5,7 @@ import { db } from '@/db';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import DashboardLayoutClient from './layout-client';
+import { AuthProvider } from '@/components/providers/auth-provider';
 
 export default async function DashboardLayout({
     children,
@@ -36,7 +37,7 @@ export default async function DashboardLayout({
     const primaryOrg = userOrgs[0];
 
     return (
-        <DashboardLayoutClient
+        <AuthProvider
             user={{
                 id: user.id,
                 email: user.email,
@@ -46,7 +47,19 @@ export default async function DashboardLayout({
             organization={primaryOrg.organization}
             membership={primaryOrg.membership}
         >
-            {children}
-        </DashboardLayoutClient>
+            <DashboardLayoutClient
+                user={{
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    image: user.image,
+                }}
+                organization={primaryOrg.organization}
+                membership={primaryOrg.membership}
+            >
+                {children}
+            </DashboardLayoutClient>
+        </AuthProvider>
     );
 }
+
