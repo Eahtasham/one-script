@@ -10,6 +10,7 @@ import {
     index,
     primaryKey,
     integer,
+    vector,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import type { AdapterAccountType } from 'next-auth/adapters';
@@ -225,6 +226,7 @@ export const knowledgeSources = pgTable('knowledge_sources', {
     type: varchar('type', { length: 50 }).notNull(),
     name: varchar('name', { length: 255 }).notNull(),
     content: text('content'),
+    embedding: vector('embedding', { dimensions: 768 }), // Gemini Pro embedding dimensions
     status: sourceStatusEnum('status').default('pending').notNull(),
     errorMessage: text('error_message'),
     metadata: jsonb('metadata').$type<{
@@ -233,6 +235,8 @@ export const knowledgeSources = pgTable('knowledge_sources', {
         pageCount?: number;
         wordCount?: number;
         url?: string;
+        localPath?: string;
+        originalName?: string;
     }>().default({}),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
