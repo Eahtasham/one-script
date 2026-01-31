@@ -1,6 +1,6 @@
 'use client';
 
-import { useUser, useOrganization } from '@/components/providers/auth-provider';
+import { useUser, useActiveOrganization } from '@/components/providers/auth-provider';
 import { useDashboardStats } from '@/hooks/use-dashboard-queries';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -10,7 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function DashboardHomeClient() {
     const user = useUser();
-    const organization = useOrganization();
+    const organization = useActiveOrganization();
     const { data: stats, isLoading, error } = useDashboardStats();
 
     if (!user || !organization) {

@@ -95,7 +95,9 @@ export default async function InvitePage({ params }: InvitePageProps) {
         // Accept the invitation
         const result = await acceptInvitation(token);
         if (result.success) {
-            redirect('/dashboard');
+            // Redirect with org ID as query param
+            // The dashboard layout will read this and set the cookie
+            redirect(`/dashboard?switch-org=${result.organizationId}`);
         }
 
         // Show error if acceptance failed

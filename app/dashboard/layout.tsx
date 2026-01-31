@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 import { auth } from '@/lib/auth';
 import { getUserOrganizations } from '@/lib/session';
 import { db } from '@/db';
@@ -6,6 +7,9 @@ import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import DashboardLayoutClient from './layout-client';
 import { AuthProvider } from '@/components/providers/auth-provider';
+
+// Cookie name for storing the user's last active organization
+const ACTIVE_ORG_COOKIE = 'active-org-id';
 
 export default async function DashboardLayout({
     children,
@@ -27,6 +31,7 @@ export default async function DashboardLayout({
         redirect('/login');
     }
 
+    // Get ALL user organizations (not just the first one)
     const userOrgs = await getUserOrganizations(session.user.id);
 
     // If user has no organization, redirect to onboarding
@@ -34,7 +39,15 @@ export default async function DashboardLayout({
         redirect('/onboarding');
     }
 
-    const primaryOrg = userOrgs[0];
+    // Check for active org preference from cookie
+    const cookieStore = await cookies();
+    const storedActiveOrgId = cookieStore.get(ACTIVE_ORG_COOKIE)?.value;
+
+    // Determine which org to activate
+    // Priority: cookie preference > first org
+    const activeOrg = storedActiveOrgId
+        ? userOrgs.find(o => o.organization.id === storedActiveOrgId) || userOrgs[0]
+        : userOrgs[0];
 
     return (
         <AuthProvider
@@ -44,8 +57,8 @@ export default async function DashboardLayout({
                 name: user.name,
                 image: user.image,
             }}
-            organization={primaryOrg.organization}
-            membership={primaryOrg.membership}
+            organizations={userOrgs}
+            activeOrgId={activeOrg.organization.id}
         >
             <DashboardLayoutClient
                 user={{
@@ -54,12 +67,12 @@ export default async function DashboardLayout({
                     name: user.name,
                     image: user.image,
                 }}
-                organization={primaryOrg.organization}
-                membership={primaryOrg.membership}
+                organizations={userOrgs}
+                activeOrganization={activeOrg.organization}
+                activeMembership={activeOrg.membership}
             >
                 {children}
             </DashboardLayoutClient>
         </AuthProvider>
     );
 }
-

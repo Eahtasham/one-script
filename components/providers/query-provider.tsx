@@ -27,7 +27,7 @@ function makeQueryClient() {
 }
 
 let browserQueryClient: QueryClient | undefined = undefined;
-
+//Singleton pattern for query client
 function getQueryClient() {
     if (typeof window === 'undefined') {
         // Server: always make a new query client
